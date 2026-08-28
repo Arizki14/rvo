@@ -1,0 +1,16 @@
+{
+	"name": "rvo",
+	"description": "WhatsApp Bot Using Lib Baileys",
+	"repository": "https://github.com/Arizki14/bot-termos",
+	"keywords": ["whatsapp-bot", "multi-device", "bot", "whatsapp"],
+	"formation": {
+		"worker": {
+			"quantity": 1
+		}
+	},
+	"buildpacks": [
+		{
+			"url": "heroku/nodejs"
+		}
+	]
+}
