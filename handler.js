@@ -14,6 +14,17 @@ import { performance } from "perf_hooks";
 import { exec, execSync } from "child_process";
 import { parsePhoneNumber } from "awesome-phonenumber";
 import baileys, { generateWAMessageContent, jidNormalizedUser, getContentType } from "baileys";
+
+import { UguuSe } from "./lib/uploader.js";
+import TicTacToe from "./lib/tictactoe.js";
+import { werewolf } from "./lib/werewolf.js";
+import templateMenu from "./lib/template_menu.js";
+import { ytMp4, ytMp3, ytMp4Stream } from "./lib/scraper.js";
+import { GroupUpdate, LoadDataBase } from "./src/message.js";
+import { CloneBot, StopCloneBot, ListCloneBot } from "./src/clonebot.js";
+import { toAudio, toPTT, toVideo, toGif, toImage } from "./lib/converter.js";
+import { cmdAdd, cmdAddHit, addExpired, getPosition, getExpired, getStatus, checkStatus } from "./src/database.js";
+import { rdGame, iGame, gameSlot, gameCasinoSolo, gameSamgongSolo, gameMerampok, gameBegal, daily, buy, setLimit, addLimit, addMoney, setMoney, transfer, Cangkulan, SnakeLadder, getChessAI } from "./lib/game.js";
 import { getRandom, getBuffer, fetchJson, runtime, clockString, sleep, isUrl, extractUrl, formatDate, formatp, generateProfilePicture, errorCache, antiSpam, runUpdate, updateSettings, parseMention, fixBytes, similarity, pickRandom, encodeToLetters, tarBackup } from "./lib/function.js";
 
 const require = createRequire(import.meta.url);
@@ -23,14 +34,6 @@ const __dirname = path.dirname(__filename);
 const timez = Intl.supportedValuesOf("timeZone");
 const menfesTimeouts = new Map();
 const settingsPath = path.join(__dirname, "settings.js");
-let canvasModule = null;
-try {
-	canvasModule = await import("@napi-rs/canvas");
-	canvasModule.GlobalFonts.registerFromPath("./src/nulis/font/Indie-Flower.ttf", "Indie Flower");
-	logInfo("Fast Mode (Canvas) Active 🚀");
-} catch (error) {
-	logInfo("Canvas not found. Fallback PureImage Active 🐢");
-}
 
 const fileContent = fs.readFileSync(__filename, "utf-8");
 const casesArray = [...fileContent.matchAll(/case\s+['"]([^'"]+)['"]/g)].map((match) => match[1]);
@@ -116,25 +119,26 @@ const sock = async (sock, m, store) => {
 		const locale_day = now_dt.toLocaleDateString(global.locale, { ...tz_opt, weekday: "long" });
 		const date = now_dt.toLocaleDateString("en-GB", tz_opt);
 		const date_time = now_dt.toLocaleTimeString("en-GB", { ...tz_opt, hour12: false });
-		
-				// Fake
-		const fkontak = {
-			key: {
-				remoteJid: "0@s.whatsapp.net",
-				participant: "0@s.whatsapp.net",
-				fromMe: false,
-				id: "Naze",
-			},
-			message: {
-				contactMessage: {
-					displayName: m.pushName || author,
-					vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${m.pushName || author},;;;\nFN:${m.pushName || author}\nitem1.TEL;waid=${m.sender.split("@")[0]}:${m.sender.split("@")[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
-					sendEphemeral: true,
-				},
-			},
-		};
-		
-				// Whitelist Chats
+	
+	// Auto Set Bio
+		if (set.autobio) {
+			if (new Date() * 1 - set.status > 60000) {
+				await sock.updateProfileStatus(`${sock.user.name} | 🎯 Runtime : ${runtime(process.uptime())}`).catch((e) => {});
+				set.status = new Date() * 1;
+			}
+		}
+
+		// Set Mode
+		if (!isCreator) {
+			if (set.grouponly === set.privateonly) {
+				if (!sock.public && !m.key.fromMe) return;
+			} else if (set.grouponly) {
+				if (!m.isGroup) return;
+			} else if (set.privateonly) {
+				if (m.isGroup) return;
+			}
+
+			// Whitelist Chats
 			if (set.whitelistonly && sock.public && set.whitelist.length > 0 && !set.whitelist.includes(m.chat)) return;
 		}
 
@@ -168,7 +172,7 @@ const sock = async (sock, m, store) => {
 					);
 			}
 		}
-		
+
 		// Filter event type
 		if (m.eventType && m.eventType !== "notify") return;
 		
@@ -270,3 +274,5 @@ const sock = async (sock, m, store) => {
 };
 
 export default sock;
+
+	
