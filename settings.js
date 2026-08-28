@@ -28,33 +28,6 @@ global.database = {
 	},
 };
 
-global.fake = {
-	anonim: "https://telegra.ph/file/95670d63378f7f4210f03.png",
-	thumbnailUrl: "https://telegra.ph/file/fe4843a1261fc414542c4.jpg",
-	thumbnail: fs.readFileSync("./src/media/hitori.jpeg"),
-	thumbnail2: fs.readFileSync("./src/media/hitori.jpg"),
-	docs: fs.readFileSync("./src/media/fake.pdf"),
-	listfakedocs: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/pdf"],
-};
-
-global.my = {
-	yt: "https://youtube.com/c/Nazedev",
-	gh: "https://github.com/nazedev",
-	gc: "https://chat.whatsapp.com/CPultzDlGoCI3OUvViyZtm",
-	ch: "120363250409960161@newsletter",
-};
-
-global.limit = {
-	free: 20,
-	premium: 999,
-	vip: 900,
-};
-
-global.money = {
-	free: 10000,
-	premium: 1000000,
-	vip: 10000000,
-};
 
 global.mess = {
 	key: "Apikey limit! Silahkan Upgrade: https://sock.biz.id",
